@@ -78,9 +78,12 @@ sub exec_cmd {
         return 0;
     }
     print(STDERR "OK\n");
+    #
     # Upon success, only print log messages if debugging is enabled
     print(STDERR "Executed command: $cmd\n") if $DEBUG;
-    print(STDERR $log) if $DEBUG;
+    print(STDERR $log);
+    # 
+    # if $DEBUG;
 
     return 1;
 }

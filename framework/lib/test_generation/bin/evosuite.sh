@@ -53,13 +53,21 @@ budget=$(echo "$D4J_TOTAL_BUDGET/2/$num_classes" | bc)
 # shellcheck disable=SC2013 # reading words rather than lines, I suppose
 for class in $(cat "$D4J_FILE_TARGET_CLASSES"); do
     #shellcheck disable=SC2153 # D4J_DIR_TESTGEN_LIB is not a typo of D4J_DIR_TESTGEN_BIN
-    cmd="java -cp $D4J_DIR_TESTGEN_LIB/evosuite-current.jar org.evosuite.EvoSuite \
+
+    if [[ "$my_evo_debug" == "1" ]]; then
+        cmd="java -cp $D4J_DIR_TESTGEN_LIB/evosuite-debug.jar shaded.org.evosuite.EvoSuite"
+    else 
+       cmd="java -cp $D4J_DIR_TESTGEN_LIB/evosuite-current.jar org.evosuite.EvoSuite"
+    fi
+
+    cmd=$cmd" \
     -class $class \
     -projectCP $project_cp \
     -seed $D4J_SEED \
     -Dsearch_budget=$budget \
     -Dassertion_timeout=$budget \
     -Dtest_dir=$D4J_DIR_OUTPUT \
+    -criterion branch \
     $add_config"
 
     # Run the test-generation command

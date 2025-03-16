@@ -84,13 +84,28 @@ exec_cmd() {
     echo "Executing command:"
     echo "$cmd"
 
-    if $cmd; then
+    output=$($cmd 2>&1)  # Capture both stdout and stderr
+    result=$?
+
+    # Print the captured output
+    echo "$output"
+
+    # Check the result of the command and print success or failure
+    if [ $result -eq 0 ]; then
         echo "OK"
         return 0
     else
         echo "FAILED"
         return 1
     fi
+
+    #if $cmd; then
+    #    echo "OK"
+    #    return 0
+    #else
+    #    echo "FAILED"
+    #    return 1
+    #fi
 }
 
 ###############################################################################
